@@ -11,6 +11,7 @@ module.exports = async (req, res) => {
 
   res.setHeader("Content-Type", "image/svg+xml");
   // res.setHeader("Cache-Control", "public, max-age=43200"); // 43200s（12h） cache
+
   const validId = /^[1-9]\d*$/;
   const clamp = (min, max, n) => Math.max(min, Math.min(max, n));
 

@@ -15,9 +15,7 @@ const {
 async function fetchStats(id, useProxy) {
   //debug 测试请求
   let reqUrl = `https://www.luogu.com.cn/user/${id}?_contentOnly`;
-console.log(`https://www.luogu.com.cn/user/${id}?_contentOnly`);
   const res = await axios.get(reqUrl);
-
   const stats = {
     name: "NULL",
     color: "Gray",
