@@ -12,48 +12,132 @@ const {
  * @param {number} id 用户id
  * @returns {Object} 获取的用户数据 {name, color, ccfLevel, total, hideInfo}
  */
+
 const stats = {
     name: "NULL",
     color: "Gray",
     ccfLevel: 0,
-    total: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    total: new Array(42).fill(0),  // 数组的大小是42，初始化为0
     hideInfo: false
-}
+};
+
+const Baisc = {
+    name: "NULL",
+    color: "Gray",
+    ccfLevel: 0,
+    total: new Array(42).fill(0),  // 数组的大小是42，初始化为0
+    hideInfo: false
+};
+
 async function fetchStats(id) {
-    var cnt = 1,flag=0;
-    while (1) {
-        let reqUrl = `https://www.luogu.com.cn/record/list?user=${id}&status=12&page=${cnt}&_contentOnly`;
-        let reqCookie = `_uid=${uid};__client_id=${client_id}`;
-        let res = await axios.get(reqUrl, {
-            headers: {
-                "Cookie": reqCookie
-            },
-        });
-        ++cnt;
-        if (res.data.code !== 200) {
-            return stats;
-        }
-        const record = res.data.currentData.records.result;
-        if (JSON.stringify(record) == '[]') {
-            if (!flag) {
-                stats.hideInfo = 1;
+    let cnt = 1;
+    let flag = 0;
+    const maxConcurrency = 10;  // 控制每次并发请求数
+    const allRecords = [];  // 用于存储所有页面的记录
+
+    // 发起请求的函数
+    async function fetchPage(page) {
+        const reqUrl = `https://www.luogu.com.cn/record/list?user=${id}&status=12&page=${page}&_contentOnly`;
+        let ord = Math.floor(Math.random() * uid.length);
+        const reqCookie = `_uid=${uid[ord]};__client_id=${client_id[ord]}`;
+        try {
+            const res = await axios.get(reqUrl, {
+                headers: {
+                    "Cookie": reqCookie
+                },
+            });
+
+            if (res.data.code !== 200) {
+                return Basic;
             }
-            return stats;
-        }
-        if (!flag) {
-            const user = record[0].user;
-            stats.name = user.name;
-            stats.color = user.color;
-            stats.ccfLevel = user.ccfLevel;
-        }
-        if (record) flag = 1;
-        for (let i of record) {
-            stats.total[i.language] += i.sourceCodeLength;
+
+            return res.data.currentData.records.result;
+        } catch (error) {
+            console.error('Request failed', error);
+            return Basic;  // 如果请求出错，返回 null
         }
     }
 
-  return stats;
-} 
+    // 发起多个请求并发执行
+    async function fetchPagesInBatch(startPage, concurrency) {
+        const requests = [];
+        for (let i = 0; i < concurrency; i++) {
+            const page = startPage + i;
+            requests.push(fetchPage(page));  // 发起多个请求
+        }
+
+        // 等待当前批次的所有请求完成
+        return await Promise.all(requests);
+    }
+
+    // 处理所有页面的请求
+    async function fetchAllPages() {
+        let batchSize = maxConcurrency;
+        let currentPage = cnt;
+
+        while (true) {
+            // 批量请求当前页和后续的页
+            const results = await fetchPagesInBatch(currentPage, batchSize);
+            let hasEmptyRecord = false;
+            for (let record of results) {
+                if (record === null || JSON.stringify(record) === '[]') {
+                    hasEmptyRecord = true;  // 如果任何一页为空，则停止
+                    break;
+                }
+
+                // 存储当前页面的记录到 allRecords
+                allRecords.push(...record);
+
+                // 如果还没有设置用户信息
+                if (!flag) {
+                    const user = record[0].user;
+                    stats.name = user.name;
+                    stats.color = user.color;
+                    stats.ccfLevel = user.ccfLevel;
+                    flag = 1;
+                }
+
+                // 累加当前页面的数据
+                for (let i of record) {
+                    stats.total[i.language] += i.sourceCodeLength;
+                }
+            }
+
+            // 如果有空记录，停止请求
+            if (hasEmptyRecord) {
+                const reqUrl = `https://www.luogu.com.cn/record/list?user=${id}&status=12&page=1&_contentOnly`;
+                let ord = Math.floor(Math.random() * uid.length);
+                const reqCookie = `_uid=${uid[ord]};__client_id=${client_id[ord]}`;
+                try {
+                    const res = await axios.get(reqUrl, {
+                        headers: {
+                            "Cookie": reqCookie
+                        },
+                    });
+
+                    if (res.data.code !== 200) {
+                        return Basic;  // 请求失败返回 null
+                    }
+
+                    if (JSON.stringify(res.data.currentData.records.result[0]) == '[]') stats.hideInfo = 1;
+                } catch (error) {
+                    console.error('Request failed', error);
+                    return Basic;  // 如果请求出错，返回 null
+                }
+                break;
+            }
+
+            // 更新下一批次的请求页面
+            currentPage += batchSize;
+        }
+
+        return stats;
+    }
+
+    // 启动并发请求
+    return fetchAllPages();
+}
+
 
 const renderSVG = (stats, options) => {
   const {
