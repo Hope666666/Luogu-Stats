@@ -21,7 +21,7 @@ const stats = {
     hideInfo: false
 };
 
-const Baisc = {
+const Basic = {
     name: "NULL",
     color: "Gray",
     ccfLevel: 0,
@@ -30,6 +30,7 @@ const Baisc = {
 };
 
 async function fetchStats(id) {
+    stats.total.fill(0);
     let cnt = 1;
     let flag = 0;
     const maxConcurrency = 10;  // 控制每次并发请求数
