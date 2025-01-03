@@ -130,7 +130,7 @@ const renderChart = (datas, labelWidth, progressWidth, unit) => { //(label, colo
     chart += `
     <g transform="translate(0, ${i*30})">
       <text x="0" y="15" class="text">${datas[i].label}</text>
-      <text x="${width + labelWidth + 10}" y="15" class="text">${datas[i].data + unit}</text>
+      <text x="${width + labelWidth + 10}" y="15" class="text">${Math.round(datas[i].data/1024) + unit}</text>
       <rect height="11" fill="${datas[i].color}" rx="5" ry="5" x="${labelWidth}" y="5" width="${width}"></rect>
     </g>
     `
@@ -142,7 +142,7 @@ const renderChart = (datas, labelWidth, progressWidth, unit) => { //(label, colo
   for(let i = 0; i <= 4; ++i) {
     coordinate += `
     <line x1="${labelWidth + dw*i}" y1="0" x2="${labelWidth + dw*i}" y2="${bodyHeight - 10}"  class="line"/>
-    <text x="${labelWidth + dw*i - (i==0?3:5) }" y="${bodyHeight}"  class="text">${maxNum*i/4}</text>
+    <text x="${labelWidth + dw*i - (i==0?3:5) }" y="${bodyHeight}"  class="text">${Math.round(maxNum*i/4/1024)}</text>
     `;
   }
   return coordinate + chart;
