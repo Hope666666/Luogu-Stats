@@ -1,11 +1,11 @@
 {
-  "name": "luogu-stats-card",
-  "version": "1.0.1",
-  "description": "洛谷数据渲染组件",
+  "name": "luogu-stats",
+  "version": "1.0.0",
+  "description": "洛谷数据svg",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
-  "author": "wao",
+  "author": "Hope",
   "license": "MIT",
   "dependencies": {
     "anafanafo": "^1.0.0",

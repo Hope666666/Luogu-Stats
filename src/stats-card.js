@@ -13,31 +13,25 @@ const {
  * @returns {Object} 获取的用户数据 {name, color, ccfLevel, total, hideInfo}
  */
 
-const stats = {
-    name: "NULL",
-    color: "Gray",
-    ccfLevel: 0,
-    total: new Array(42).fill(0),  // 数组的大小是42，初始化为0
-    hideInfo: false
-};
-
 const Basic = {
     name: "NULL",
     color: "Gray",
     ccfLevel: 0,
     total: new Array(42).fill(0),  // 数组的大小是42，初始化为0
-    hideInfo: false
+    hideInfo: false,
+    Error: false
 };
 
 async function fetchStats(id) {
-    stats.total.fill(0);
+    const stats = Basic;
     let cnt = 1;
     let flag = 0;
-    const maxConcurrency = 10;  // 控制每次并发请求数
+    const maxConcurrency = 5;  // 控制每次并发请求数
     const allRecords = [];  // 用于存储所有页面的记录
 
     // 发起请求的函数
     async function fetchPage(page) {
+        if (stats.Error) return null;
         const reqUrl = `https://www.luogu.com.cn/record/list?user=${id}&status=12&page=${page}&_contentOnly`;
         let ord = Math.floor(Math.random() * uid.length);
         const reqCookie = `_uid=${uid[ord]};__client_id=${client_id[ord]}`;
@@ -47,15 +41,16 @@ async function fetchStats(id) {
                     "Cookie": reqCookie
                 },
             });
-
             if (res.data.code !== 200) {
-                return Basic;
+                throw new Error('Non-200 status code received');
             }
 
             return res.data.currentData.records.result;
         } catch (error) {
             console.error('Request failed', error);
-            return Basic;  // 如果请求出错，返回 null
+            stats.Error = 1;
+         //   console.log(stats.Error);
+            return null;
         }
     }
 
@@ -66,8 +61,8 @@ async function fetchStats(id) {
             const page = startPage + i;
             requests.push(fetchPage(page));  // 发起多个请求
         }
-
         // 等待当前批次的所有请求完成
+        if (stats.Error) return null;
         return await Promise.all(requests);
     }
 
@@ -79,6 +74,7 @@ async function fetchStats(id) {
         while (true) {
             // 批量请求当前页和后续的页
             const results = await fetchPagesInBatch(currentPage, batchSize);
+            if (stats.Error) return Basic;
             let hasEmptyRecord = false;
             for (let record of results) {
                 if (record === null || JSON.stringify(record) === '[]') {
@@ -117,7 +113,7 @@ async function fetchStats(id) {
                     });
 
                     if (res.data.code !== 200) {
-                        return Basic;  // 请求失败返回 null
+                        throw new Error('Non-200 status code received');
                     }
 
                     if (JSON.stringify(res.data.currentData.records.result[0]) == '[]') stats.hideInfo = 1;
@@ -143,10 +139,11 @@ async function fetchStats(id) {
 const renderSVG = (stats, options) => {
   const {
     name,
-    color,
-    ccfLevel,
-    total,
-    hideInfo
+        color,
+        ccfLevel,
+      total,
+      hideInfo,
+      Error
   } = stats;
 
   const { 
@@ -155,6 +152,9 @@ const renderSVG = (stats, options) => {
     cardWidth = 500, 
   } = options || {};
 
+    if (Error) {
+        return renderError("出现了一些问题，可能请求过于频繁，提出ISSUE或稍后再试")
+    }
   if(hideInfo) {
     return renderError("用户开启了“完全隐私保护”，获取数据失败");
   }
