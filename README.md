@@ -25,7 +25,14 @@
 
 使用 `![](https://luogu-stats-ten.vercel.app/?id=blabla...)`
 
-由于访问 Record 需要大量 cookie 防止被限制，可以捐献一些。我们保证不会使用您的 cookie 做其他事情。
+由于访问 Record 需要大量 `cookie` 防止被限制，您可以捐献一些。我们保证不会使用您的 `cookie` 做其他事情。
+
+
+您也可以 
+
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/Hope666666/Luogu-Stats) 
+
+然后在 `Vercel` 环境变量中配置您的 `UID=blabla,blabla`，`CLIENT_ID=blabla,blabla`
 
 ### 自定义选项
 
