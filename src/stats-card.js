@@ -1,5 +1,6 @@
 const axios = require("axios");
-let { uid, client_id, maxConcurrency } = require("../setting.js");
+const { maxConcurrency } = require("../setting.js");
+const uid = process.env.UID.split(','), client_id = process.env.CLIENT_ID.split(',');
 const {
     Card,
     renderError,
@@ -163,13 +164,13 @@ const renderSVG = (stats, options) => {
     const progressWidth = cardWidth - 2 * paddingX - labelWidth - 60; //500 - 25*2(padding) - 90(头部文字长度) - 60(预留尾部文字长度)，暂时固定，后序提供自定义选项;
 
     const datas = [
-        { label: "C++", color: "#bfbfbf", data: total[2] + total[3] + total[4] + total[11] + total[12] + total[27] + total[28] },
+        { label: "C++", color: "#9d3dcf", data: total[2] + total[3] + total[4] + total[11] + total[12] + total[27] + total[28] },
         { label: "Pascal", color: "#fe4c61", data: total[1] },
         { label: "Python", color: "#f39c11", data: total[7] + total[25] },
         { label: "Java", color: "#ffc116", data: total[8] + total[33] },
         { label: "Rust", color: "#52c41a", data: total[15] },
         { label: "Go", color: "#3498db", data: total[14] },
-        { label: "Haskell", color: "#9d3dcf", data: total[19] },
+        { label: "Haskell", color: "#bfbfbf", data: total[19] },
         { label: "OCaml", color: "#0e1d69", data: total[30] },
     ]
     datas.sort(function (a, b) {
