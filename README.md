@@ -21,12 +21,11 @@
 
 ## 效果预览
 
-![](https://luogu-stats-ten.vercel.app/?id=1510473)
+![](https://luogu-stats-ten.vercel.app/?id=687081)
 
 使用 `![](https://luogu-stats-ten.vercel.app/?id=blabla...)`
 
 由于访问 Record 需要大量 `cookie` 防止被限制，您可以捐献一些。我们保证不会使用您的 `cookie` 做其他事情。
-
 
 您也可以 
 
