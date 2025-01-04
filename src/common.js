@@ -70,6 +70,22 @@ class Card {
   }
 }
 
+function ToType(num) {
+    if (num < 1024) {
+        return `${num}B`;
+    }
+    else if (num < 1024 * 1024) {
+        return `${Math.floor(num / 1024.00 * 100) / 100.00}KB`;
+    }
+    else if (num < 1024 * 1024 * 1024) {
+        return `${Math.floor(num / 1024.00 / 1024.00 * 100) / 100.00}MB`;
+    }
+    else if (num < 1024 * 1024 * 1024 * 1024) {
+        return `${Math.floor(num / 1024.00 / 1024.00 / 1024.00 * 100) / 100.00}MB`;
+    }
+    return `怎么这么大呢?BoB`;
+}
+
 /**
  * 渲染错误卡片
  * @param {string} e 描述错误的文本
@@ -118,9 +134,8 @@ const renderCCFBadge = (level, x) => {
  * @param {number} datas.data 一条数据的数值
  * @param {number} labelWidth 标签宽度
  * @param {number} progressWidth 柱状图的长度
- * @param {string} [unit] 数据单位
  */
-const renderChart = (datas, labelWidth, progressWidth, unit) => { //(label, color, height, num, unit) => {
+const renderChart = (datas, labelWidth, progressWidth) => { //(label, color, height, num) => {
   let chart = "";
   let maxNum = datas.reduce((a, b) => Math.max(a, b.data), 0);
   maxNum = (parseInt((maxNum-1) / 100) + 1) * 100;
@@ -130,7 +145,7 @@ const renderChart = (datas, labelWidth, progressWidth, unit) => { //(label, colo
     chart += `
     <g transform="translate(0, ${i*30})">
       <text x="0" y="15" class="text">${datas[i].label}</text>
-      <text x="${width + labelWidth + 10}" y="15" class="text">${Math.round(datas[i].data/1024) + unit}</text>
+      <text x="${width + labelWidth + 10}" y="15" class="text">${ToType(datas[i].data)}</text>
       <rect height="11" fill="${datas[i].color}" rx="5" ry="5" x="${labelWidth}" y="5" width="${width}"></rect>
     </g>
     `
@@ -141,8 +156,8 @@ const renderChart = (datas, labelWidth, progressWidth, unit) => { //(label, colo
   let coordinate = "";
   for(let i = 0; i <= 4; ++i) {
     coordinate += `
-    <line x1="${labelWidth + dw*i}" y1="0" x2="${labelWidth + dw*i}" y2="${bodyHeight - 10}"  class="line"/>
-    <text x="${labelWidth + dw*i - (i==0?3:5) }" y="${bodyHeight}"  class="text">${Math.round(maxNum*i/4/1024)}</text>
+    <line x1="${labelWidth + dw * i}" y1="0" x2="${labelWidth + dw * i}" y2="${bodyHeight - 10}"  class="line"/>
+    <text x="${labelWidth + dw * i - (i == 0 ? 3 : 5)}" y="${bodyHeight}"  class="text">${ToType(maxNum * i / 4)}</text>
     `;
   }
   return coordinate + chart;
@@ -181,5 +196,6 @@ module.exports = {
   renderError,
   renderCCFBadge,
   renderChart,
-  renderNameTitle,
+    renderNameTitle,
+  ToType,
 };
