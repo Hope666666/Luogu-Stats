@@ -24,6 +24,8 @@
 
 使用 `![](https://luogu-stats-ten.vercel.app/?id=blabla...)`
 
+由于访问 Record 需要大量 cookie 防止被限制
+
 ### 自定义选项
 
 使用卡片时，支持设定自定义效果选项，可以组合使用。
