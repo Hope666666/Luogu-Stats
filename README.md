@@ -20,7 +20,9 @@
 
 ## 效果预览
 
-![](https://luogu.wao3.cn/api/practice?id=313209)
+![](https://luogu-stats-ten.vercel.app/?id=1510473)
+
+使用 `![](https://luogu-stats-ten.vercel.app/?id=blabla...)`
 
 ### 自定义选项
 
