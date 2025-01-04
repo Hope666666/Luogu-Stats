@@ -17,6 +17,7 @@
 - [x] ~~REMOVE Crash Code~~
 - [ ] 更新卡片外观
 - [ ] ADD Theme
+- [ ] 若 Cookie 不可用自动跳过
 
 ## 效果预览
 
@@ -24,7 +25,7 @@
 
 使用 `![](https://luogu-stats-ten.vercel.app/?id=blabla...)`
 
-由于访问 Record 需要大量 cookie 防止被限制
+由于访问 Record 需要大量 cookie 防止被限制，可以捐献一些。我们保证不会使用您的 cookie 做其他事情。
 
 ### 自定义选项
 
