@@ -1,5 +1,5 @@
 const axios = require("axios");
-axios.defaults.timeout = 3000;
+axios.defaults.timeout = 8000;
 const { maxConcurrency } = require("../setting.js");
 const uid = process.env.UID.split(','), client_id = process.env.CLIENT_ID.split(',');
 const {
