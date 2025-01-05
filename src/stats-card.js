@@ -1,4 +1,5 @@
 const axios = require("axios");
+axios.defaults.timeout = 5000;
 const { maxConcurrency } = require("../setting.js");
 const uid = process.env.UID.split(','), client_id = process.env.CLIENT_ID.split(',');
 const {
@@ -43,13 +44,12 @@ async function fetchStats(id) {
                 },
             });
             if (res.data.code !== 200) {
-                throw new Error('Non-200 status code received');
+                throw new Error(`Status code ${res.data.code}`);
             }
-
             return res.data.currentData.records.result;
         } catch (error) {
             console.error('Request failed', error);
-            stats.Error = 1;
+            stats.Error = ord;
             //   console.log(stats.Error);
             return null;
         }
@@ -114,12 +114,13 @@ async function fetchStats(id) {
                     });
 
                     if (res.data.code !== 200) {
-                        throw new Error('Non-200 status code received');
+                        throw new Error(`Status code ${res.data.code}`);
                     }
 
                     if (JSON.stringify(res.data.currentData.records.result[0]) == '[]') stats.hideInfo = 1;
                 } catch (error) {
                     console.error('Request failed', error);
+                    stats.Error = ord;
                     return Basic;  // 如果请求出错，返回 null
                 }
                 break;
@@ -153,7 +154,7 @@ const renderSVG = (stats, options) => {
     } = options || {};
 
     if (Error) {
-        return renderError("出现了一些问题，可能请求过于频繁，提出ISSUE或稍后再试")
+        return renderError(`出现了一些问题，可能请求过于频繁，提出ISSUE或稍后再试 CODE:${Error}`);
     }
     if (hideInfo) {
         return renderError("用户开启了“完全隐私保护”，获取数据失败");
