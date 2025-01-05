@@ -1,10 +1,10 @@
 # Luogu Language Stats
 
-![stars](https://badgen.net/github/stars/Hope666666/Luogu-Stats?cache=600)
-![forks](https://badgen.net/github/forks/Hope666666/Luogu-Stats?cache=600)
+![stars](https://badgen.net/github/stars/Hope666666/Luogu-Stats)
+![forks](https://badgen.net/github/forks/Hope666666/Luogu-Stats)
 ![commits](https://badgen.net/github/commits/Hope666666/Luogu-Stats)
-![last commit](https://badgen.net/github/last-commit/Hope666666/Luogu-Stats?cache=600)
-![top language](https://img.shields.io/github/languages/top/Hope666666/Luogu-Stats?cache=600)
+![last commit](https://badgen.net/github/last-commit/Hope666666/Luogu-Stats)
+![top language](https://img.shields.io/github/languages/top/Hope666666/Luogu-Stats)
 [![MIT License](https://badgen.net/github/license/Hope666666/Luogu-Stats)](https://github.com/Hope666666/Luogu-Stats/blob/master/LICENSE)
 
 能在右上角轻轻点一下小星星吗 QwQ？
