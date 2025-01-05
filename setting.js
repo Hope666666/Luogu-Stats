@@ -1,1 +1,1 @@
-export let maxConcurrency = 9;// 控制每次并发请求数
+export let maxConcurrency = 6;
