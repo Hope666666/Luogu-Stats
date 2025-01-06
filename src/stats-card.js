@@ -20,7 +20,7 @@ const Basic = {
     name: "NULL",
     color: "Gray",
     ccfLevel: 0,
-    total: new Array(42).fill(0),  // 数组的大小是42，初始化为0
+    total: new Array(60).fill(0),  // 数组的大小是42，初始化为0
     hideInfo: false,
     Error: false
 };
