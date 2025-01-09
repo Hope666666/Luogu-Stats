@@ -38,7 +38,10 @@ async function fetchStats(id) {
         let ord = Math.floor(Math.random() * uid.length);
         const reqCookie = `_uid=${uid[ord]};__client_id=${client_id[ord]}`;
         try {
-            const res = await axios.get(reqUrl, {
+            const res = await axios.get(reqUrl,{ 
+                validateStatus: function (status) {
+                    return 1;
+                },
                 headers: {
                     "Cookie": reqCookie
                 },
@@ -107,7 +110,10 @@ async function fetchStats(id) {
                 let ord = Math.floor(Math.random() * uid.length);
                 const reqCookie = `_uid=${uid[ord]};__client_id=${client_id[ord]}`;
                 try {
-                    const res = await axios.get(reqUrl, {
+                    const res = await axios.get(reqUrl,{ 
+                        validateStatus: function (status) {
+                            return 1;
+                        },
                         headers: {
                             "Cookie": reqCookie
                         },
