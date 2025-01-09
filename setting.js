@@ -1,1 +1,1 @@
-export let maxConcurrency = 7;
+export let maxConcurrency = 6;
