@@ -47,12 +47,12 @@ async function fetchStats(id) {
                 },
             });
             if (res.data.code !== 200) {
-                throw new Error(`Status code ${res.data.code}`);
+                throw new Error(res.data);
             }
             return res.data.currentData.records.result;
         } catch (error) {
             console.error('Request failed', error);
-            stats.Error = res;
+            stats.Error = error;
             //   console.log(stats.Error);
             return null;
         }
@@ -120,13 +120,13 @@ async function fetchStats(id) {
                     });
 
                     if (res.data.code !== 200) {
-                        throw new Error(`Status code ${res.data.code}`);
+                        throw new Error(res.data);
                     }
 
                     if (JSON.stringify(res.data.currentData.records.result[0]) == '[]') stats.hideInfo = 1;
                 } catch (error) {
                     console.error('Request failed', error);
-                    stats.Error = res;
+                    stats.Error = error;
                     return Basic;  // 如果请求出错，返回 null
                 }
                 break;
