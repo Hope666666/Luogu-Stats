@@ -47,7 +47,7 @@ async function fetchStats(id) {
                 },
             });
             if (res.data.code !== 200) {
-                throw new Error(res.data);
+                throw new Error(res);
             }
             return res.data.currentData.records.result;
         } catch (error) {
@@ -120,7 +120,7 @@ async function fetchStats(id) {
                     });
 
                     if (res.data.code !== 200) {
-                        throw new Error(res.data);
+                        throw new Error(res);
                     }
 
                     if (JSON.stringify(res.data.currentData.records.result[0]) == '[]') stats.hideInfo = 1;
